@@ -81,9 +81,9 @@ function useFetchPrs() {
 }
 
 function App() {
-  const [prs, loading] = useFetchPrs()
   const [repos, setRepos] = useState(REPOS.map(repo => [repo, true]))
   const [reviewers, setReviewers] = useState([])
+  const [prs, loading] = useFetchPrs()
 
   const changeOption = useCallback((groupName, optionName, check) => {
     let setFn = null
@@ -161,6 +161,7 @@ function App() {
   return html`
     <${Layout}
       title="Aragon Pull Requests"
+      hasToken=${Boolean(GITHUB_TOKEN)}
       options=${[
         ['Repos', repos],
         ['Reviewers', reviewers],

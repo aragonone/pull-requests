@@ -1,6 +1,6 @@
 import { css, html } from './utils'
 
-export function Layout({ title, options, columns }) {
+export function Layout({ title, hasToken, options, columns }) {
   return html`
     <main
       class=${css`
@@ -16,15 +16,43 @@ export function Layout({ title, options, columns }) {
           padding: 1rem;
         `}
       >
-        <h1
+        <div
           class=${css`
-            font-size: 1.3rem;
-            font-weight: 400;
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            min-height: 55px;
           `}
         >
-          ${title}
-        </h1>
-
+          <h1
+            class=${css`
+              font-size: 1.3rem;
+              font-weight: 400;
+            `}
+          >
+            ${title}
+          </h1>
+          ${hasToken && (
+            html`
+              <button
+                class=${css`
+                  height: 100%;
+                  padding: 10px 10px;
+                  margin-left: auto;
+                  border-radius: 0.25rem;
+                  outline: 0;
+                  background: #111;
+                  :active,
+                  :focus {
+                    background: #1a1a1a;
+                  }
+                `}
+              >
+                Set Github token
+              </button>
+            `
+          )}
+        </div>
         ${options}
       </div>
 
