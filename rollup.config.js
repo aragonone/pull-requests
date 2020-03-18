@@ -22,6 +22,7 @@ module.exports = {
     replace({
       'process.env.NODE_ENV': JSON.stringify('production'),
       'process.env.GITHUB_TOKEN': JSON.stringify(process.env.GITHUB_TOKEN),
+      'process.env.TRACKED_REPOS': JSON.stringify(process.env.TRACKED_REPOS),
     }),
   ],
 }

@@ -4,5 +4,10 @@
   "scope": "aragonone",
   "github": {
     "silent": true
+  },
+  "build": {
+    "env": {
+      "TRACKED_REPOS": "aragon/aragon, aragon/aragon-apps, aragon/aragon-ui, aragon/aragon.js, aragon/aragonOS, aragon/aragon-cli, aragon/aragon-court, aragon/buidler-plugin, aragon/court-dashboard, aragon/radspec, aragon/use-wallet, aragonone/court-backend, aragonone/notification-service"
+    }
   }
 }

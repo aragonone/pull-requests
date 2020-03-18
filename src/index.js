@@ -16,14 +16,7 @@ const GITHUB_API_HEADERS = {
   authorization: GITHUB_TOKEN ? `token ${GITHUB_TOKEN}` : null
 }
 
-const REPOS = [
-  'aragon/aragon',
-  'aragon/aragon-apps',
-  'aragon/aragon-ui',
-  'aragon/aragon.js',
-  'aragon/aragonOS',
-  'aragon/aragon-cli',
-]
+const REPOS = process.env.TRACKED_REPOS.split(',').map(repo => repo.trim())
 
 const GROUPS = [
   [30, '😭'],
