@@ -7,7 +7,14 @@ import { OptionsGroup } from './OptionsGroup'
 
 const ONE_DAY = 24 * 60 * 60 * 1000
 
-const BASE_API_URL = 'https://api.github.com'
+const BASE_GITHUB_API_URL = 'https://api.github.com'
+const LOCAL_GITHUB_TOKEN_KEY = 'GITHUB_TOKEN'
+const GITHUB_TOKEN = localStorage.getItem(LOCAL_GITHUB_TOKEN_KEY) || process.env.GITHUB_TOKEN
+const GITHUB_API_HEADERS = {
+  // See https://developer.github.com/v3/#current-version
+  accept: 'application/vnd.github.v3+json',
+  authorization: GITHUB_TOKEN ? `token ${GITHUB_TOKEN}` : null
+}
 
 const REPOS = [
   'aragon/aragon',
@@ -27,7 +34,9 @@ const GROUPS = [
 ]
 
 async function getRepoPrs(repo) {
-  const res = await fetch(`${BASE_API_URL}/repos/${repo}/pulls`)
+  const res = await fetch(`${BASE_GITHUB_API_URL}/repos/${repo}/pulls`, {
+    headers: GITHUB_API_HEADERS,
+  })
   const prs = await res.json()
   return prs.map(pr => {
     const reviewers = pr.requested_reviewers.map(user => user.login)
