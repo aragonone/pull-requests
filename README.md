@@ -4,6 +4,13 @@ Dashboard for keeping track of Github pull requests across repos, users, and org
 
 ## Configuration
 
+Tracked repos (and the user / organization headings) are configured via an environment variable.
+
+- `TRACKED_REPOS`: A comma-delimited list of repositories to track and automatically fetch pull requests from. Example configuration: `'aragon/aragon,aragon/aragon-apps,aragon/aragon-ui'`
+
+
+More documentation is available in [`env.sample`](./env.sample).
+
 ### Development
 
 - `GITHUB_TOKEN`: Personal Github token ([create one with the `repo` scope](https://github.com/settings/tokens), to decrease API throttling and allow  access of private repos during development. **NOT** meant for production usage.
