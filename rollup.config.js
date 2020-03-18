@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const commonjs = require('rollup-plugin-commonjs')
 const resolve = require('@rollup/plugin-node-resolve')
 const copy = require('rollup-plugin-copy')
@@ -17,6 +19,9 @@ module.exports = {
     copy({
       targets: [{ src: 'src/index.html', dest: BUILD_DIR }],
     }),
-    replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
+    replace({
+      'process.env.NODE_ENV': JSON.stringify('production'),
+      'process.env.GITHUB_TOKEN': JSON.stringify(process.env.GITHUB_TOKEN),
+    }),
   ],
 }
