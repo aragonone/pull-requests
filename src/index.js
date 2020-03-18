@@ -98,6 +98,53 @@ function App() {
     }
   }, [])
 
+  const options = useMemo(
+    () => {
+      const reviewerOptions = html`
+        <${OptionsGroup}
+          name="Reviewers"
+          onOptionChange=${changeOption}
+          options=${reviewers}
+        />
+      `
+      // Get user / organization grouping of repos
+      const repoByOrgs = [...repos.reduce((orgMap, [name, checked]) => {
+        const [orgName, repoName] = name.split('/')
+        const repoSet = orgMap.get(orgName) || []
+        repoSet.push([repoName, checked, name])
+        orgMap.set(orgName, repoSet)
+
+        return orgMap
+      }, new Map())]
+      const repoOptions = html`
+        <div
+          class=${css`
+            font-size: 0.8rem;
+          `}
+        >
+          Repos:
+          <div
+            class=${css`
+              padding-left: 20px;
+            `}
+          >
+            ${repoByOrgs.map(([orgName, orgRepos]) => html`
+                <${OptionsGroup}
+                  name=${orgName}
+                  settingName="Repos"
+                  onOptionChange=${changeOption}
+                  options=${orgRepos}
+                />
+              `
+            )}
+          </div>
+          </div>
+      `
+
+      return [repoOptions, reviewerOptions]
+    }, [repos, reviewers]
+  )
+
   const groups = useMemo(
     () =>
       GROUPS.reduce(
@@ -155,19 +202,7 @@ function App() {
     <${Layout}
       title="Aragon Pull Requests"
       hasToken=${Boolean(GITHUB_TOKEN)}
-      options=${[
-        ['Repos', repos],
-        ['Reviewers', reviewers],
-      ].map(
-        ([name, options]) =>
-          html`
-            <${OptionsGroup}
-              name=${name}
-              onOptionChange=${changeOption}
-              options=${options}
-            />
-          `
-      )}
+      options=${options}
       columns=${groups.map(
         ([days, emoji, prs]) =>
           html`

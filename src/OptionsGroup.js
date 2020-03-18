@@ -2,6 +2,7 @@ import { css, html } from './utils'
 
 export function OptionsGroup({
   name: groupName,
+  settingName,
   options = [],
   onOptionChange = () => null,
 }) {
@@ -38,7 +39,7 @@ export function OptionsGroup({
       >
         ${options.length > 0
           ? options.map(
-              ([name, checked]) => html`
+              ([name, checked, optionName]) => html`
                 <label
                   class=${css`
                     display: flex;
@@ -58,7 +59,9 @@ export function OptionsGroup({
                   <input
                     type="checkbox"
                     checked=${checked}
-                    onClick=${() => onOptionChange(groupName, name, !checked)}
+                    onClick=${() =>
+                      onOptionChange(settingName || groupName, optionName || name, !checked)
+                    }
                   />
                   <span
                     class=${css`
