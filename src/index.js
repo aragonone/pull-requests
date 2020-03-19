@@ -101,12 +101,7 @@ function App() {
     }
   }, [])
   const changeIgnored = useCallback(() =>
-    setIgnoredInDraft(ignored => {
-      console.log('ignored', ignored)
-      return !ignored
-    }),
-    []
-  )
+    setIgnoredInDraft(ignored => !ignored), [])
 
   const options = useMemo(
     () => {
