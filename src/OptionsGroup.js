@@ -1,4 +1,5 @@
 import { css, html } from './utils'
+import { Checkbox } from './Checkbox'
 
 export function OptionsGroup({
   name: groupName,
@@ -40,36 +41,13 @@ export function OptionsGroup({
         ${options.length > 0
           ? options.map(
               ([name, checked, optionName]) => html`
-                <label
-                  class=${css`
-                    display: flex;
-                    align-items: center;
-                    padding: 0.3rem 0.5rem;
-                    background: #111;
-                    color: #ddd;
-                    border-radius: 0.25rem;
-                    cursor: pointer;
-                    margin-right: 1rem;
-                    white-space: nowrap;
-                    :active {
-                      background: #1a1a1a;
-                    }
-                  `}
-                >
-                  <input
-                    type="checkbox"
-                    checked=${checked}
-                    onClick=${() =>
-                      onOptionChange(settingName || groupName, optionName || name, !checked)
-                    }
-                  />
-                  <span
-                    class=${css`
-                      margin-left: 0.25rem;
-                    `}
-                    >${name.replace('aragon/', '')}</span
-                  >
-                </label>
+                <${Checkbox}
+                  checked=${checked}
+                  name=${name}
+                  onClick=${() =>
+                    onOptionChange(settingName || groupName, optionName || name, !checked)
+                  }
+                />
               `
             )
           : 'Loading…'}

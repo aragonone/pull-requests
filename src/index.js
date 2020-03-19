@@ -1,6 +1,7 @@
 import { render } from 'preact'
 import { useCallback, useEffect, useMemo, useState } from 'preact/hooks'
 import { css, html, flatten } from './utils'
+import { Checkbox } from './Checkbox'
 import { Layout } from './Layout'
 import { PrGroup } from './PrGroup'
 import { OptionsGroup } from './OptionsGroup'
@@ -36,13 +37,14 @@ async function getRepoPrs(repo) {
     return {
       assignees: pr.assignees,
       created: new Date(pr.created_at),
-      url: pr.html_url,
+      draft: pr.draft,
       number: pr.number,
+      repo: pr.base.repo.full_name,
       reviewers: reviewers.length > 0 ? reviewers : ['none'],
       state: pr.state,
       title: pr.title,
+      url: pr.html_url,
       user: pr.user.login,
-      repo: pr.base.repo.full_name,
     }
   })
 }
@@ -76,6 +78,7 @@ function useFetchPrs() {
 function App() {
   const [repos, setRepos] = useState(REPOS.map(repo => [repo, true]))
   const [reviewers, setReviewers] = useState([])
+  const [ignoredInDraft, setIgnoredInDraft] = useState(true)
   const [prs, loading] = useFetchPrs()
 
   const changeOption = useCallback((groupName, optionName, check) => {
@@ -97,6 +100,8 @@ function App() {
       )
     }
   }, [])
+  const changeIgnored = useCallback(() =>
+    setIgnoredInDraft(ignored => !ignored), [])
 
   const options = useMemo(
     () => {
@@ -117,12 +122,27 @@ function App() {
         return orgMap
       }, new Map())]
       const repoOptions = html`
-        <div
-          class=${css`
-            font-size: 0.8rem;
-          `}
-        >
-          Repos:
+        <div>
+          <div
+            class=${css`
+              display: flex;
+              align-items: center;
+              font-size: 0.8rem;
+              margin-bottom: 1rem;
+            `}
+          >
+            <div
+              class=${css`
+                width: 5rem;
+                margin-right: 1rem;
+              `}
+            >Repos:</div>
+            <${Checkbox}
+              checked=${ignoredInDraft}
+              name="Ignore draft PRs"
+              onClick=${changeIgnored}
+            </label>
+          </div>
           <div
             class=${css`
               padding-left: 20px;
@@ -142,7 +162,7 @@ function App() {
       `
 
       return [repoOptions, reviewerOptions]
-    }, [repos, reviewers]
+    }, [ignoredInDraft, repos, reviewers]
   )
 
   const groups = useMemo(
@@ -152,6 +172,11 @@ function App() {
           const groupPrs = []
           const remainingPrs = []
           prs.forEach(pr => {
+            // Filter by draft status
+            if (ignoredInDraft && pr.draft) {
+              return
+            }
+
             // Filter by reviewer
             if (
               pr.reviewers.length > 0 &&
@@ -183,7 +208,7 @@ function App() {
         },
         [[], [...prs].reverse()]
       )[0],
-    [prs, reviewers, repos]
+    [ignoredInDraft, prs, reviewers, repos]
   )
 
   useEffect(() => {
