@@ -12,10 +12,12 @@ const BASE_API_URL = 'https://api.github.com'
 const REPOS = [
   'aragon/aragon',
   'aragon/aragon-apps',
+  'aragon/connect',
   'aragon/aragon-ui',
   'aragon/aragon.js',
   'aragon/aragonOS',
   'aragon/aragon-cli',
+  'aragon/use-wallet',
 ]
 
 const GROUPS = [
